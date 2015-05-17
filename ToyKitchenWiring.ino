@@ -10,8 +10,8 @@ LightController l2 = LightController(ledPins[1], buttonPins[1],"2");
 LightController l3 = LightController(ledPins[0], buttonPins[2],"3");
 
 void setup() {
-  l1.setTimeout(3);
-  l2.setTimeout(3);
+  l1.setTimeout(15);
+  l2.setTimeout(15);
   l3.setTimeout(120);
   #ifdef DEBUG
   Serial.begin(9600); 
