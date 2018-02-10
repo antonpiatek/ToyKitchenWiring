@@ -1,0 +1,64 @@
+//#define BOUNCE_LOCK_OUT
+#include <buttons.h>
+
+//#define DEBUG
+#define NUM_BUTT_AND_LED 3
+
+const int ledPins[NUM_BUTT_AND_LED] = {11,12,13};
+int ledStates[NUM_BUTT_AND_LED]     = {LOW,LOW,LOW};
+const int buttonPins[NUM_BUTT_AND_LED] = {2,3,4};
+
+Button buttons[NUM_BUTT_AND_LED];
+
+
+void setup() {
+  // Setup the buttons with an internal pull-up and debouncer
+  for (int i = 0; i < sizeof(buttons); i++){
+    buttons[i] = Button(OneShot);
+    buttons[i].assign(buttonPins[i]);
+  //  buttons[i].turnOnPullUp();
+  }
+
+
+  // Set leds
+  for (int i = 0; i < sizeof(ledPins); i++){
+    pinMode(ledPins[i], OUTPUT);
+    digitalWrite(ledPins[i], ledStates[i]);
+  }
+  #ifdef DEBUG
+    Serial.begin(9600); 
+    Serial.println("Debug enabled");
+  #endif
+}
+
+int lastState[NUM_BUTT_AND_LED];
+int readings[NUM_BUTT_AND_LED];
+
+int last = HIGH;
+
+void loop() {
+/*  
+  debouncers[1].update();
+    int r = debouncers[1].read();
+    //if ( r == LOW && r != last ){
+    if ( r == LOW){
+      ledStates[0] = !ledStates[0];
+      digitalWrite(ledPins[0], ledStates[0] );
+      //Serial.println(String(r));
+    }
+  last = r;
+*/
+
+  // Get the updated value :
+  for (int i = 0; i < sizeof(readings); i++){
+    readings[i] = buttons[i].check();
+  }
+
+  for (int i = 0; i < sizeof(readings); i++){
+    if ( readings[i] == ON ){
+      ledStates[i] = !ledStates[i];
+      digitalWrite(ledPins[i], ledStates[i] );
+//      Serial.println(String(readings[i]));
+    } 
+  }
+}
